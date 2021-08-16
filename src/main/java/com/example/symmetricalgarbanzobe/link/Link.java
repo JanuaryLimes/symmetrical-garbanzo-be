@@ -1,51 +1,21 @@
 package com.example.symmetricalgarbanzobe.link;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table
 public class Link {
     @Id
-    @SequenceGenerator(
-            name = "link_sequence",
-            sequenceName = "link_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "link_sequence"
-    )
-    private Long id;
-    private String originalPath;
     private String shortPath;
+    private String originalPath;
 
     public Link() {
     }
 
-    public Link(String originalPath, String shortPath) {
-        this.originalPath = originalPath;
+    public Link(String shortPath, String originalPath) {
         this.shortPath = shortPath;
-    }
-
-    public Link(Long id, String originalPath, String shortPath) {
-        this.id = id;
-        this.originalPath = originalPath;
-        this.shortPath = shortPath;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getOriginalPath() {
-        return originalPath;
-    }
-
-    public void setOriginalPath(String originalPath) {
         this.originalPath = originalPath;
     }
 
@@ -57,12 +27,19 @@ public class Link {
         this.shortPath = shortPath;
     }
 
+    public String getOriginalPath() {
+        return originalPath;
+    }
+
+    public void setOriginalPath(String originalPath) {
+        this.originalPath = originalPath;
+    }
+
     @Override
     public String toString() {
         return "Link{" +
-                "id=" + id +
+                "shortPath='" + shortPath + '\'' +
                 ", originalPath='" + originalPath + '\'' +
-                ", shortPath='" + shortPath + '\'' +
                 '}';
     }
 }
