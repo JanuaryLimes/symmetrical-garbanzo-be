@@ -1,10 +1,13 @@
 package com.example.symmetricalgarbanzobe.api;
 
+import com.example.symmetricalgarbanzobe.exception.ErrorResponse;
 import com.example.symmetricalgarbanzobe.link.Link;
 import com.example.symmetricalgarbanzobe.repository.LinkRepository;
 import com.example.symmetricalgarbanzobe.service.LinkService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,8 +43,16 @@ public class LinkController {
         return responseLink;
     }
 
-    @DeleteMapping(path = "{linkId}")
-    public void deleteLink(@PathVariable("linkId") Long linkId) {
-        linkService.deleteLink(linkId);
+    @PostMapping(path = "shorten/label")
+    public ResponseEntity<?> registerCustomLink(@RequestBody Link link) {
+        Link responseLink = linkRepository.findLinkByShortPath(link.getShortPath());
+        if (responseLink != null) {
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.setMessage("given short link already exists");
+            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        }
+        responseLink = new Link(link.getShortPath(), link.getOriginalPath());
+        linkService.addNewLink(responseLink);
+        return new ResponseEntity<>(responseLink, HttpStatus.OK);
     }
 }
