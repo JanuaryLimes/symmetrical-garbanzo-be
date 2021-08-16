@@ -25,9 +25,20 @@ public class LinkController {
         this.linkRepository = linkRepository;
     }
 
-    @GetMapping
+    @GetMapping(path = "shorten")
     public List<Link> getLinks() {
         return linkService.getLinks();
+    }
+
+    @GetMapping(path = "shorten/{shortPath}")
+    public ResponseEntity<?> getOriginalLink(@PathVariable("shortPath") String shortPath) {
+        Link responseLink = linkRepository.findLinkByShortPath(shortPath);
+        if (responseLink != null) {
+            return new ResponseEntity<>(responseLink, HttpStatus.OK);
+        }
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("short link not found");
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(path = "shorten")
