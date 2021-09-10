@@ -1,12 +1,13 @@
 package com.example.symmetricalgarbanzobe.link;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(path = "api/v1/link")
 class LinkController {
@@ -35,13 +36,11 @@ class LinkController {
 
     @PostMapping(path = "shorten")
     Link register(@RequestBody Link link) {
-        String shortPath = RandomStringUtils.randomAlphanumeric(8);
-
         Link responseLink = linkService.getByOriginalPath(link.getOriginalPath());
         if (responseLink != null) {
             return responseLink;
         }
-        responseLink = new Link(shortPath, link.getOriginalPath());
+        responseLink = new Link(linkService.generateShortPath(), link.getOriginalPath());
         linkService.addNew(responseLink);
         return responseLink;
     }
@@ -57,5 +56,13 @@ class LinkController {
         responseLink = new Link(link.getShortPath(), link.getOriginalPath());
         linkService.addNew(responseLink);
         return new ResponseEntity<>(responseLink, HttpStatus.OK);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    private ResponseEntity<LinkErrorResponse> handleNullPointerException(NullPointerException e) {
+        LinkErrorResponse error = new LinkErrorResponse();
+        error.setMessage(e.getMessage());
+        log.warn("originalPath is marked non-null but is null");
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

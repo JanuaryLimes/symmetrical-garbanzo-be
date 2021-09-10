@@ -1,11 +1,13 @@
 package com.example.symmetricalgarbanzobe.link;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 class LinkService {
+    private final static int SHORT_PATH_LENGTH = 8;
     private final LinkRepository linkRepository;
 
     public LinkService(LinkRepository linkRepository) {
@@ -26,5 +28,9 @@ class LinkService {
 
     public void addNew(Link link) {
         linkRepository.save(link);
+    }
+
+    public String generateShortPath() {
+        return RandomStringUtils.randomAlphanumeric(SHORT_PATH_LENGTH);
     }
 }
