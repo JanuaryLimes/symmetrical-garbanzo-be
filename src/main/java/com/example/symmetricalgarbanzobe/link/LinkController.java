@@ -1,7 +1,6 @@
 package com.example.symmetricalgarbanzobe.link;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +12,9 @@ import java.util.List;
 class LinkController {
 
     private final LinkService linkService;
-    private final LinkRepository linkRepository;
 
-    @Autowired
-    public LinkController(LinkService linkService, LinkRepository linkRepository) {
+    public LinkController(LinkService linkService) {
         this.linkService = linkService;
-        this.linkRepository = linkRepository;
     }
 
     @GetMapping(path = "shorten")
@@ -28,7 +24,7 @@ class LinkController {
 
     @GetMapping(path = "shorten/{shortPath}")
     public ResponseEntity<?> getOriginalLink(@PathVariable("shortPath") String shortPath) {
-        Link responseLink = linkRepository.findLinkByShortPath(shortPath);
+        Link responseLink = linkService.getLinkByShortPath(shortPath);
         if (responseLink != null) {
             return new ResponseEntity<>(responseLink, HttpStatus.OK);
         }
@@ -41,7 +37,7 @@ class LinkController {
     public Link registerNewLink(@RequestBody Link link) {
         String shortPath = RandomStringUtils.randomAlphanumeric(8);
 
-        Link responseLink = linkRepository.findLinkByOriginalPath(link.getOriginalPath());
+        Link responseLink = linkService.getLinkByOriginalPath(link.getOriginalPath());
         if (responseLink != null) {
             return responseLink;
         }
@@ -52,7 +48,7 @@ class LinkController {
 
     @PostMapping(path = "shorten/label")
     public ResponseEntity<?> registerCustomLink(@RequestBody Link link) {
-        Link responseLink = linkRepository.findLinkByShortPath(link.getShortPath());
+        Link responseLink = linkService.getLinkByShortPath(link.getShortPath());
         if (responseLink != null) {
             LinkErrorResponse linkErrorResponse = new LinkErrorResponse();
             linkErrorResponse.setMessage("given short link already exists");

@@ -1,6 +1,5 @@
 package com.example.symmetricalgarbanzobe.link;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,13 +8,20 @@ import java.util.List;
 class LinkService {
     private final LinkRepository linkRepository;
 
-    @Autowired
     public LinkService(LinkRepository linkRepository) {
         this.linkRepository = linkRepository;
     }
 
     public List<Link> getLinks() {
         return linkRepository.findAll();
+    }
+
+    public Link getLinkByShortPath(String shortPath) {
+        return linkRepository.findLinkByShortPath(shortPath);
+    }
+
+    public Link getLinkByOriginalPath(String original) {
+        return linkRepository.findLinkByOriginalPath(original);
     }
 
     public void addNewLink(Link link) {
