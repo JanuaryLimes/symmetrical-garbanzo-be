@@ -1,9 +1,5 @@
-package com.example.symmetricalgarbanzobe.api;
+package com.example.symmetricalgarbanzobe.link;
 
-import com.example.symmetricalgarbanzobe.exception.ErrorResponse;
-import com.example.symmetricalgarbanzobe.link.Link;
-import com.example.symmetricalgarbanzobe.repository.LinkRepository;
-import com.example.symmetricalgarbanzobe.service.LinkService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/link")
-public class LinkController {
+class LinkController {
 
     private final LinkService linkService;
     private final LinkRepository linkRepository;
@@ -36,9 +32,9 @@ public class LinkController {
         if (responseLink != null) {
             return new ResponseEntity<>(responseLink, HttpStatus.OK);
         }
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("short link not found");
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        LinkErrorResponse linkErrorResponse = new LinkErrorResponse();
+        linkErrorResponse.setMessage("short link not found");
+        return new ResponseEntity<>(linkErrorResponse, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(path = "shorten")
@@ -58,9 +54,9 @@ public class LinkController {
     public ResponseEntity<?> registerCustomLink(@RequestBody Link link) {
         Link responseLink = linkRepository.findLinkByShortPath(link.getShortPath());
         if (responseLink != null) {
-            ErrorResponse errorResponse = new ErrorResponse();
-            errorResponse.setMessage("given short link already exists");
-            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+            LinkErrorResponse linkErrorResponse = new LinkErrorResponse();
+            linkErrorResponse.setMessage("given short link already exists");
+            return new ResponseEntity<>(linkErrorResponse, HttpStatus.CONFLICT);
         }
         responseLink = new Link(link.getShortPath(), link.getOriginalPath());
         linkService.addNewLink(responseLink);

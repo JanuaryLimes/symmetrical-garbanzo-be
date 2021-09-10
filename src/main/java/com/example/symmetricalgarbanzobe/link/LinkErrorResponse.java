@@ -1,6 +1,6 @@
-package com.example.symmetricalgarbanzobe.exception;
+package com.example.symmetricalgarbanzobe.link;
 
-public class ErrorResponse {
+class LinkErrorResponse {
     private String message;
 
     public String getMessage() {

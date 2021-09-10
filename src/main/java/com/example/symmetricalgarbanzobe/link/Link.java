@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class Link {
+class Link {
     @Id
     private String shortPath;
     private String originalPath;

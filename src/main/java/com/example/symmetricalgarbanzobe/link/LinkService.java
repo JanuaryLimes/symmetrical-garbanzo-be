@@ -1,14 +1,12 @@
-package com.example.symmetricalgarbanzobe.service;
+package com.example.symmetricalgarbanzobe.link;
 
-import com.example.symmetricalgarbanzobe.link.Link;
-import com.example.symmetricalgarbanzobe.repository.LinkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class LinkService {
+class LinkService {
     private final LinkRepository linkRepository;
 
     @Autowired
