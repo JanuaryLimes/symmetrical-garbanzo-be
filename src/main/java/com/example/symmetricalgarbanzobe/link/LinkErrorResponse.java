@@ -1,13 +1,8 @@
 package com.example.symmetricalgarbanzobe.link;
 
+import lombok.Data;
+
+@Data
 class LinkErrorResponse {
     private String message;
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

@@ -12,27 +12,19 @@ class LinkService {
         this.linkRepository = linkRepository;
     }
 
-    public List<Link> getLinks() {
+    public List<Link> getAll() {
         return linkRepository.findAll();
     }
 
-    public Link getLinkByShortPath(String shortPath) {
-        return linkRepository.findLinkByShortPath(shortPath);
+    public Link getByShortPath(String shortPath) {
+        return linkRepository.findByShortPath(shortPath);
     }
 
-    public Link getLinkByOriginalPath(String original) {
-        return linkRepository.findLinkByOriginalPath(original);
+    public Link getByOriginalPath(String original) {
+        return linkRepository.findByOriginalPath(original);
     }
 
-    public void addNewLink(Link link) {
+    public void addNew(Link link) {
         linkRepository.save(link);
-    }
-
-    public void deleteLink(Long linkId) {
-        boolean exists = linkRepository.existsById(linkId);
-        if (!exists) {
-            throw new IllegalStateException("link with id" + linkId + " doesnt exists");
-        }
-        linkRepository.deleteById(linkId);
     }
 }
